@@ -9,7 +9,11 @@
   (letfn [(transform [[k v]] [(t k) v])]
     (postwalk (fn [x] (if (map? x) (into {} (map transform x)) x)) coll)))
 
-(def props-kebab->camel->js (comp clj->js camel-case-keys))
+(defn props-kebab->camel->js
+  [props]
+  (->> props
+       (transform-keys camel-case)
+       clj->js))
 
 (defn create-mui-cmp
   ([react-class args]
